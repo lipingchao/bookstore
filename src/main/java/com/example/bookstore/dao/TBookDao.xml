@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.bookstore.dao.TBookDao">
+  <resultMap id="BaseResultMap" type="com.example.bookstore.pojo.TBook">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="BOOK_NAME" jdbcType="VARCHAR" property="bookName" />
+    <result column="BOOK_INTRODUCE" jdbcType="VARCHAR" property="bookIntroduce" />
+    <result column="BOOK_AUTHOR" jdbcType="VARCHAR" property="bookAuthor" />
+    <result column="BORROWING_COUNT" jdbcType="VARCHAR" property="borrowingCount" />
+    <result column="BORROWING_FLAG" jdbcType="DECIMAL" property="borrowingFlag" />
+    <result column="PIC_URL" jdbcType="VARCHAR" property="picUrl" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, BOOK_NAME, BOOK_INTRODUCE, BOOK_AUTHOR, BORROWING_COUNT, BORROWING_FLAG, PIC_URL
+  </sql>
+  <select id="selectByExample" parameterType="com.example.bookstore.pojo.TBookExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_BOOK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BOOK
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_BOOK
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.bookstore.pojo.TBookExample">
+    delete from T_BOOK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.example.bookstore.pojo.TBook" useGeneratedKeys="true">
+    insert into T_BOOK (BOOK_NAME, BOOK_INTRODUCE, BOOK_AUTHOR, 
+      BORROWING_COUNT, BORROWING_FLAG, PIC_URL
+      )
+    values (#{bookName,jdbcType=VARCHAR}, #{bookIntroduce,jdbcType=VARCHAR}, #{bookAuthor,jdbcType=VARCHAR}, 
+      #{borrowingCount,jdbcType=VARCHAR}, #{borrowingFlag,jdbcType=DECIMAL}, #{picUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.example.bookstore.pojo.TBook" useGeneratedKeys="true">
+    insert into T_BOOK
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        BOOK_NAME,
+      </if>
+      <if test="bookIntroduce != null">
+        BOOK_INTRODUCE,
+      </if>
+      <if test="bookAuthor != null">
+        BOOK_AUTHOR,
+      </if>
+      <if test="borrowingCount != null">
+        BORROWING_COUNT,
+      </if>
+      <if test="borrowingFlag != null">
+        BORROWING_FLAG,
+      </if>
+      <if test="picUrl != null">
+        PIC_URL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookIntroduce != null">
+        #{bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="bookAuthor != null">
+        #{bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingCount != null">
+        #{borrowingCount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingFlag != null">
+        #{borrowingFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.bookstore.pojo.TBookExample" resultType="java.lang.Long">
+    select count(*) from T_BOOK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update T_BOOK
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookName != null">
+        BOOK_NAME = #{record.bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookIntroduce != null">
+        BOOK_INTRODUCE = #{record.bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookAuthor != null">
+        BOOK_AUTHOR = #{record.bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.borrowingCount != null">
+        BORROWING_COUNT = #{record.borrowingCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.borrowingFlag != null">
+        BORROWING_FLAG = #{record.borrowingFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="record.picUrl != null">
+        PIC_URL = #{record.picUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update T_BOOK
+    set ID = #{record.id,jdbcType=VARCHAR},
+      BOOK_NAME = #{record.bookName,jdbcType=VARCHAR},
+      BOOK_INTRODUCE = #{record.bookIntroduce,jdbcType=VARCHAR},
+      BOOK_AUTHOR = #{record.bookAuthor,jdbcType=VARCHAR},
+      BORROWING_COUNT = #{record.borrowingCount,jdbcType=VARCHAR},
+      BORROWING_FLAG = #{record.borrowingFlag,jdbcType=DECIMAL},
+      PIC_URL = #{record.picUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.bookstore.pojo.TBook">
+    update T_BOOK
+    <set>
+      <if test="bookName != null">
+        BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookIntroduce != null">
+        BOOK_INTRODUCE = #{bookIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="bookAuthor != null">
+        BOOK_AUTHOR = #{bookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingCount != null">
+        BORROWING_COUNT = #{borrowingCount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingFlag != null">
+        BORROWING_FLAG = #{borrowingFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="picUrl != null">
+        PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.bookstore.pojo.TBook">
+    update T_BOOK
+    set BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      BOOK_INTRODUCE = #{bookIntroduce,jdbcType=VARCHAR},
+      BOOK_AUTHOR = #{bookAuthor,jdbcType=VARCHAR},
+      BORROWING_COUNT = #{borrowingCount,jdbcType=VARCHAR},
+      BORROWING_FLAG = #{borrowingFlag,jdbcType=DECIMAL},
+      PIC_URL = #{picUrl,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
